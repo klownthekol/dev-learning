@@ -1,15 +1,23 @@
-function allowedToDrink(age) {
-    if (age >= 19) {
-        return true;
-
-    } else {
-        return false;
+class Person {
+    constructor(firstName, lastName, dob) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = new Date(dob);
     }
-}
 
-function allowedToDrink2(age) {
-    return age >= 19 ? 'yes' : 'no';
-}
+    getBirthYear() {
+        return this.dob.getFullYear();
+    }
 
-console.log(allowedToDrink(18));
-console.log(allowedToDrink2(19));
+    getFullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+} 
+
+
+const person1 = new Person('klown', 'theKol', '03-19-2001');
+const person2 = new Person('Jenna', 'theStarr', '08-24-2003');
+
+console.log(`${person1.getFullName()} was born in the year ${person1.getBirthYear()}`);
+console.log(`${person2.getFullName()} was born in the year ${person2.getBirthYear()}`);
+console.log(person1);
