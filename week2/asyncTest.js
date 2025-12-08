@@ -1,31 +1,36 @@
-const getTodos = (callback) => {
+const getTodos = (resource) => {
 
-    const request = new XMLHttpRequest();
+    return new Promise((resolve, reject) => {
 
-    request.addEventListener('readystatechange', () => {
+        const request = new XMLHttpRequest();
 
-    //console.log(request, request.readyState);
+        request.addEventListener('readystatechange', () => {
 
-    if(request.readyState === 4 && request.status === 200) {
-        const data = JSON.parse(request.responseText);
-        callback(undefined, data);
-    } else if (request.readyState === 4) {
-        callback('could not find data', undefined);
-    }
+        //console.log(request, request.readyState);
+
+        if(request.readyState === 4 && request.status === 200) {
+            const data = JSON.parse(request.responseText);
+            resolve(data);
+        } else if (request.readyState === 4) {
+            reject('error getting resource');
+        }
+        });
+        //https://jsonplaceholder.typicode.com/todos/
+        request.open('GET', resource);
+        request.send();
+
     });
-//https://jsonplaceholder.typicode.com/todos/
-    request.open('GET', 'todos.json');
-    request.send();
+};
 
-}
+getTodos('todos/luigi.JSON').then(data => {
+    console.log("promise 1 resolved: ", data);
+    return getTodos('todos/mario.JSON');
+}).then(data => {
+    console.log("promise 2 resolved: ", data);
+    return getTodos('todos/shawn.JSON');
+}).then(data => {
 
-getTodos((err, data) => {
-
-    console.log('callback fired');
-    if(err) {
-        console.log(err);
-    } else {
-        console.log(data);
-    }
-
+    console.log('promise 3 resolved: ', data);
+}).catch(err => {
+    console.log('promise rejected: ', err);
 });
