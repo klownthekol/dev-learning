@@ -1,22 +1,14 @@
 const readline = require('readline');
 
-// const getProjectData = async () => {
-
-//     const response = await fetch('https://api.coingecko.com/api/CG-nTsVxM6TkPAK6ETNyfB2vW71/simple/price?ids=solana&vs_currencies=usd&include_market_cap=true')
-
-
-// }
-
-function getProjectData(input) {
+async function getProjectData(input) {
   
+  const lowerText = input.toLowerCase();
   
-    const lowerText = input.toLowerCase();
+  const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${lowerText}&vs_currencies=usd&include_market_cap=true&x_cg_demo_api_key=CG-nTsVxM6TkPAK6ETNyfB2vW71`);
 
-    const returnedData = async (lowerText) => {
+  const returnedData = await response.json();
 
-        const response = await fetch('https://api.coingecko.com/api/CG-nTsVxM6TkPAK6ETNyfB2vW71/simple/price?ids=solana&vs_currencies=usd&include_market_cap=true')
-    }
-  
+  return returnedData;
 
 }
 
@@ -32,24 +24,30 @@ function main() {
   console.log('Type "exit" to quit.\n');
 
   const askForCoin = () => {
-    rl.question('Enter name of crypto: ', (input) => {
+
+    rl.question('Enter name of crypto: ', async (input) => {
+
       if (input.toLowerCase() === 'exit') {
+
         console.log('\nGoodbye!');
         rl.close();
         return;
+
       }
 
       if (!input.trim()) {
+
         console.log('Please enter some text to analyze.\n');
-        askForTweet();
+        askForCoin();
         return;
+
       }
-
-      const result = getProjectData(input);
-
-      console.log('\n--- Data Result ---');
       
-      console.log('-----------------------\n');
+      const result = await getProjectData(input);
+      const coinKey = Object.keys(result)[0];
+
+
+      console.log(`Retrieved data: Price - ${result[coinKey].usd} Marketcap - ${result[coinKey].usd_market_cap}`);
 
       askForCoin();
     });
