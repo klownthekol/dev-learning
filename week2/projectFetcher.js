@@ -47,7 +47,7 @@ function main() {
       const coinKey = Object.keys(result)[0];
 
 
-      console.log(`Retrieved data: Price - ${result[coinKey].usd} Marketcap - ${result[coinKey].usd_market_cap}`);
+      console.log(`Retrieved data: Price - $${result[coinKey].usd} Marketcap - $${result[coinKey].usd_market_cap.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
 
       askForCoin();
     });
